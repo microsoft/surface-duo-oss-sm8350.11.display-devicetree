@@ -174,6 +174,22 @@ Optional properties:
 - qcom,max-refresh-rate:		Maximum refresh rate supported by the panel. If max refresh
 					rate is not specified, then the frame rate of the panel in
 					qcom,mdss-dsi-panel-framerate is used.
+- qcom,dsi-dyn-clk-enable:		Boolean to indicate dsi dynamic clock switch feature
+					is supported.
+- qcom,dsi-dyn-clk-list:		An u32 array which lists all the supported dsi bit clock
+					frequencies in Hz for the given panel.
+- qcom,dsi-dyn-clk-type:		A string that specifies the sub-type for the dynamic
+					clk feature. If dyn clk type is not specified, default
+					value "legacy" is used.
+					"legacy" = FPS is not maintained after dynamic clock switch.
+					"constant-fps-adjust-hfp" = FPS is maintained even after
+					dynamic clock switch by changing panel horizontal front
+					porch values.
+					"constant-fps-adjust-vfp" = FPS is maintained even after
+					dynamic clock switch by changing panel vertical front
+					porch values.
+					This dyn-clk-type entry is an optional binding which is
+					contingent on the enabling of dynamic clock switch.
 - qcom,mdss-dsi-bl-pmic-control-type:	A string that specifies the implementation of backlight
 					control for this panel.
 					"bl_ctrl_pwm" = Backlight controlled by PWM gpio.
@@ -578,6 +594,11 @@ Optional properties:
 					to identify the default topology for the
 					display. The first set is indexed by the
 					value 0.
+- qcom,dsi-panel-gpio-address:		An u32 pair consisting of base address of the
+					TLMM register space and size of each GPIO pin.
+- qcom,dsi-panel-gpio-pins:		An u32 array consisting of all the GPIO pins used
+					for driving the DSI host and the panels
+					connected to the host.
 - qcom,mdss-dsi-ext-bridge-mode:	External bridge chip is connected instead of panel.
 - qcom,mdss-dsi-dma-schedule-line:	An integer value indicates the line number after vertical active
 					region for video mode panels and line number after TE for command mode
@@ -759,6 +780,10 @@ Example:
 		qcom,mdss-dsi-force-clock-lane-hs;
 		qcom,compression-mode = "dsc";
 		qcom,adjust-timer-wakeup-ms = <1>;
+
+		qcom,dsi-panel-gpio-address = <0x0F100000 0x1000>;
+		qcom,dsi-panel-gpio-pins = <12 24 82>;
+
 		qcom,mdss-dsi-display-timings {
 			wqhd {
 				qcom,mdss-dsi-cmd-mode;
