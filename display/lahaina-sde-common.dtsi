@@ -26,7 +26,7 @@
 		qcom,sde-ctl-off = <0x16000 0x17000 0x18000
 					0x19000 0x1a000 0x1b000>;
 		qcom,sde-ctl-size = <0x1e8>;
-		qcom,sde-ctl-display-pref = "primary", "none", "none",
+		qcom,sde-ctl-display-pref = "primary", "secondary", "none",
 			    "none", "none", "none";
 
 		qcom,sde-mixer-off = <0x45000 0x46000 0x47000
@@ -275,6 +275,33 @@
 			qcom,sde-dspp-dither = <0x82c 0x00010007>;
 		};
 
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				ctl0_intf1_out: endpoint@0 {
+					remote-endpoint = <&mdss_dsi0_in>;
+				};
+
+				ctl0_intf2_out: endpoint@1 {
+					remote-endpoint = <&mdss_dsi1_in>;
+				};
+			};
+
+			port@1 {
+				reg = <1>;
+				ctl1_intf1_out: endpoint@0 {
+					remote-endpoint = <&mdss_dsi0_in>;
+				};
+
+				ctl1_intf2_out: endpoint@1 {
+					remote-endpoint = <&mdss_dsi1_in>;
+				};
+			};
+		};
+
 	};
 
 	mdss_dsi0: qcom,mdss_dsi_ctrl0@ae94000 {
@@ -315,6 +342,24 @@
 				qcom,supply-disable-load = <0>;
 			};
 		};
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				mdss_dsi0_in: endpoint {
+					remote-endpoint = <&ctl0_intf1_out>;
+				};
+			};
+
+			port@1 {
+				reg = <1>;
+				mdss_dsi0_out: endpoint {
+				};
+			};
+		};
 	};
 
 	mdss_dsi1: qcom,mdss_dsi_ctrl1@ae96000 {
@@ -353,6 +398,24 @@
 				qcom,supply-max-voltage = <0>;
 				qcom,supply-enable-load = <0>;
 				qcom,supply-disable-load = <0>;
+			};
+		};
+
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				mdss_dsi1_in: endpoint {
+					remote-endpoint = <&ctl1_intf2_out>;
+				};
+			};
+
+			port@1 {
+				reg = <1>;
+				mdss_dsi1_out: endpoint {
+				};
 			};
 		};
 	};
