@@ -1,5 +1,6 @@
 #include "lahaina-sde-display-common.dtsi"
 #include <dt-bindings/clock/qcom,dispcc-lahaina.h>
+#include <dt-bindings/clock/qcom,rpmh.h>/*MSCHANGE*/
 
 &tlmm {
 	display_panel_avdd_default: display_panel_avdd_default {
@@ -75,7 +76,8 @@
 			  * MDP clock nodes, no actual vote shall be added and this
 			  * change is done just to satisfy sync state requirements.
 			  */
-			 <&clock_dispcc DISP_CC_MDSS_MDP_CLK>;
+			 <&clock_dispcc DISP_CC_MDSS_MDP_CLK>,
+			 <&clock_rpmh RPMH_LN_BB_CLK3>;/*MSCHANGE*/
 	clock-names = "mux_byte_clk0", "mux_pixel_clk0",
 			"cphy_byte_clk0", "cphy_pixel_clk0",
 			"src_byte_clk0", "src_pixel_clk0",
@@ -86,7 +88,7 @@
 			"src_byte_clk1", "src_pixel_clk1",
 			"shadow_byte_clk1", "shadow_pixel_clk1",
 			"shadow_cphybyte_clk1", "shadow_cphypixel_clk1",
-			"mdp_core_clk";
+			"mdp_core_clk", "ext_trig_clk";/*MSCHANGE*/
 
 	pinctrl-names = "panel_active", "panel_suspend";
 	pinctrl-0 = <&sde_dsi_active &sde_te_active>;
@@ -97,7 +99,7 @@
 
 	vddio-supply = <&L12C>;
 	vdd-supply = <&L13C>;
-	avdd-supply = <&display_panel_avdd>;
+	/*avdd-supply = <&display_panel_avdd>;*/
 	lab-supply = <&ab_vreg>;
 	ibb-supply = <&ibb_vreg>;
 };
@@ -125,12 +127,13 @@
 		  * MDP clock nodes, no actual vote shall be added and this
 		  * change is done just to satisfy sync state requirements.
 		  */
-		 <&clock_dispcc DISP_CC_MDSS_MDP_CLK>;
+		 <&clock_dispcc DISP_CC_MDSS_MDP_CLK>,
+		 <&clock_rpmh RPMH_LN_BB_CLK3>;/*MSCHANGE*/
 	clock-names = "mux_byte_clk0", "mux_pixel_clk0",
 			"cphy_byte_clk0", "cphy_pixel_clk0",
 			"mux_byte_clk1", "mux_pixel_clk1",
 			"cphy_byte_clk1", "cphy_pixel_clk1",
-			"mdp_core_clk";
+			"mdp_core_clk", "ext_trig_clk";/*MSCHANGE*/
 
 	pinctrl-names = "panel_active", "panel_suspend";
 	pinctrl-0 = <&sde_dsi1_active &sde_te1_active>;
@@ -141,11 +144,11 @@
 
 	vddio-supply = <&L12C>;
 	vdd-supply = <&L13C>;
-	avdd-supply = <&display_panel_avdd>;
+	/*avdd-supply = <&display_panel_avdd>;*/
 };
 
 &mdss_mdp {
-	connectors = <&smmu_sde_unsec &smmu_sde_sec &sde_dp &sde_wb &sde_dsi
+	connectors = <&smmu_sde_unsec &smmu_sde_sec &sde_wb &sde_dp &sde_dsi
 		&sde_dsi1 &sde_rscc>;
 };
 
@@ -260,3 +263,427 @@
 		};
 	};
 };
+
+/*MSCHANGE start*/
+&dsi_elgin_dsi0_c3_cmd {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0";
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi1_r2_cmd {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-sec-clocks = "mux_byte_clk1", "mux_pixel_clk1";
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi0_c3_cmd_ev2 {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi1_r2_cmd_ev2 {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-sec-clocks = "mux_byte_clk1", "mux_pixel_clk1", "ext_trig_clk";
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi0_c3_cmd_ev3 {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi0_c3_cmd_dv {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi0_c3_cmd_mp {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi1_r2_cmd_ev3 {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-sec-clocks = "mux_byte_clk1", "mux_pixel_clk1", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi1_r2_cmd_dv {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-sec-clocks = "mux_byte_clk1", "mux_pixel_clk1", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi1_r2_cmd_mp {
+	qcom,ulps-enabled;
+	qcom,esd-check-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-sec-clocks = "mux_byte_clk1", "mux_pixel_clk1", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi_sync_cmd {
+	qcom,esd-check-enabled;
+	qcom,ulps-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0";
+	qcom,dsi-select-sec-clocks = "mux_byte_clk0", "mux_pixel_clk0";
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi_sync_cmd_ev2 {
+	qcom,esd-check-enabled;
+	qcom,ulps-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+	qcom,dsi-select-sec-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi_sync_cmd_ev3 {
+	qcom,esd-check-enabled;
+	qcom,ulps-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+	qcom,dsi-select-sec-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi_sync_cmd_dv {
+	qcom,esd-check-enabled;
+	qcom,ulps-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+	qcom,dsi-select-sec-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+
+&dsi_elgin_dsi_sync_cmd_mp {
+	qcom,esd-check-enabled;
+	qcom,ulps-enabled;
+	qcom,mdss-dsi-panel-status-check-mode = "reg_read";
+	qcom,mdss-dsi-panel-status-command = [06 01 00 01 00 00 01 0a];
+	qcom,mdss-dsi-panel-status-command-state = "dsi_lp_mode";
+	qcom,mdss-dsi-panel-status-value = <0x9c>;
+	qcom,mdss-dsi-panel-status-read-length = <1>;
+	qcom,dsi-select-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+	qcom,dsi-select-sec-clocks = "mux_byte_clk0", "mux_pixel_clk0", "ext_trig_clk";
+
+	surface-panel-status-value = <0xdc>;
+	surface-panel-transient-mask = <0x98>;
+
+	qcom,mdss-dsi-display-timings {
+		/*60 HZ timing*/
+		timing@0 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+		/*90 HZ timing*/
+		timing@1 {
+			qcom,mdss-dsi-panel-phy-timings = [00 1A 06 06 16 20 07 07 07 02 04 00 16 0B];
+			qcom,display-topology = <1 1 1>;
+			qcom,default-topology-index = <0>;
+		};
+	};
+};
+/*MSCHANGE end*/

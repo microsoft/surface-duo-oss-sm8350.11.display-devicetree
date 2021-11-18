@@ -24,7 +24,12 @@
 		compatible = "qcom,dp-display";
 
 		usb-phy = <&usb_qmp_dp_phy>;
+		/*MSCHANGE start*/
+		/*
 		qcom,dp-aux-switch = <&fsa4480>;
+		*/
+		qcom,aux-en-gpio = <&tlmm 26 0>;
+		/*MSCHANGE end*/
 		qcom,ext-disp = <&ext_disp>;
 		qcom,altmode-dev = <&altmode 0>;
 		usb-controller = <&usb0>;
@@ -258,9 +263,10 @@
 		<&clock_dispcc DISP_CC_MDSS_BYTE1_INTF_CLK>,
 		<&clock_dispcc DISP_CC_MDSS_PCLK1_CLK>,
 		<&clock_dispcc DISP_CC_MDSS_PCLK1_CLK_SRC>,
-		<&clock_dispcc DISP_CC_MDSS_ESC1_CLK>;
+		<&clock_dispcc DISP_CC_MDSS_ESC1_CLK>,
+		<&clock_dispcc DISP_CC_MDSS_ESC0_CLK>;
 	clock-names = "byte_clk", "byte_clk_rcg", "byte_intf_clk",
-			"pixel_clk", "pixel_clk_rcg", "esc_clk";
+			"pixel_clk", "pixel_clk_rcg", "esc_clk", "m_esc_clk";
 };
 
 &mdss_dsi_phy0 {
