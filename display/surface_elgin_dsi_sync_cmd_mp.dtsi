@@ -1,0 +1,268 @@
+&mdss_mdp {
+	dsi_elgin_dsi_sync_cmd_mp: qcom,mdss_dsi_elgin_dsi_sync_cmd_mp {
+		qcom,mdss-dsi-panel-name = "dsi elgin dsc dsi sync cmd mp";
+		qcom,mdss-dsi-panel-type = "dsi_cmd_mode";
+		qcom,mdss-dsi-panel-physical-type = "oled";
+		qcom,mdss-dsi-virtual-channel-id = <0>;
+		qcom,mdss-dsi-stream = <0>;
+		qcom,mdss-dsi-bpp = <24>;
+		qcom,mdss-dsi-color-order = "rgb_swap_rgb";
+		qcom,mdss-dsi-underflow-color = <0xff>;
+		qcom,mdss-dsi-border-color = <0>;
+		qcom,dsi-ctrl-num = <0>;
+		qcom,dsi-phy-num = <0>;
+		qcom,dsi-sec-ctrl-num = <1>;
+		qcom,dsi-sec-phy-num = <1>;
+
+		qcom,mdss-dsi-traffic-mode = "non_burst_sync_event";
+		qcom,mdss-dsi-lane-map = "lane_map_0123";
+		qcom,mdss-dsi-bllp-eof-power-mode;
+		qcom,mdss-dsi-bllp-power-mode;
+		qcom,mdss-dsi-lane-0-state;
+		qcom,mdss-dsi-lane-1-state;
+		qcom,mdss-dsi-lane-2-state;
+		qcom,mdss-dsi-lane-3-state;
+		qcom,mdss-dsi-dma-trigger = "trigger_sw";
+		qcom,mdss-dsi-mdp-trigger = "none";
+		qcom,mdss-dsi-reset-sequence = <0 10>, <1 10>;
+		qcom,mdss-pan-physical-width-dimension = <85>;
+		qcom,mdss-pan-physical-height-dimension = <120>;
+		qcom,mdss-dsi-te-pin-select = <1>;
+		qcom,mdss-dsi-te-dcs-command = <1>;
+		qcom,mdss-dsi-wr-mem-start = <0x2c>;
+		qcom,mdss-dsi-wr-mem-continue = <0x3c>;
+		qcom,mdss-dsi-te-check-enable;
+		qcom,mdss-dsi-te-using-te-pin;
+        surface-platform-freq-force-gpio = <&tlmm 166 0>;
+		surface-platform-freq-sel-gpio= <&tlmm 167 0>;
+
+		qcom,mdss-dsi-display-timings {
+			timing@0{
+				qcom,mdss-dsi-panel-framerate = <60>;
+				qcom,mdss-dsi-panel-width = <1344>;
+				qcom,mdss-dsi-panel-height = <1892>;
+				qcom,mdss-dsi-h-front-porch = <32>;
+				qcom,mdss-dsi-h-back-porch = <32>;
+				qcom,mdss-dsi-h-pulse-width = <32>;
+				qcom,mdss-dsi-h-sync-skew = <0>;
+				qcom,mdss-dsi-h-sync-pulse = <0>;
+				qcom,mdss-dsi-v-back-porch = <32>;
+				qcom,mdss-dsi-v-front-porch = <32>;
+				qcom,mdss-dsi-v-pulse-width = <10>;
+				qcom,mdss-dsi-panel-jitter = <0x1 0x1>;
+				qcom,mdss-dsi-cmd-mode;
+				qcom,compression-mode = "dsc";
+				qcom,mdss-dsc-version = <0x11>;
+				qcom,mdss-dsc-scr-version = <0x0>;
+				qcom,mdss-dsc-encoders = <1>;
+				qcom,mdss-dsc-slice-per-pkt = <2>;
+				qcom,mdss-dsc-slice-height = <946>;
+				qcom,mdss-dsc-slice-width = <672>;
+				qcom,mdss-dsc-bit-per-component = <8>;
+				qcom,mdss-dsc-bit-per-pixel = <8>;
+				qcom,mdss-dsc-block-prediction-enable;
+				qcom,mdss-dsi-panel-clockrate = <740000000>;
+				qcom,mdss-dsi-t-clk-post = <0x0B>;
+				qcom,mdss-dsi-t-clk-pre = <0x016>;
+				qcom,mdss-dsi-panel-phy-timings = [00 19 06 06 15 20 06 06 07 02 04 00 16 0B];
+				qcom,mdss-dsi-on-command = [
+					39 01 00 00 00 00 03 7F 5A 5A					// UCS Access
+					39 01 00 00 00 00 03 F0 5A 5A					// MCS Access LV1
+					39 01 00 00 00 00 03 F1 5A 5A					// MCS Access LV2
+					39 01 00 00 00 00 03 F2 5A 5A					// MCS Access LV3
+					39 01 00 00 00 00 02 E7 00						// Flash Access
+					15 01 00 00 00 00 02 02 01						// Enable DSC
+					15 01 00 00 00 00 02 59 00						// Command DSC mode
+					39 01 00 00 00 00 05 2A 00 00 05 3F				// Column address - 1,343
+					39 01 00 00 00 00 05 2B 00 00 07 63				// Page address - 1,891
+					39 01 00 00 00 00 03 51 02 4D					// Default DBV - 80 nits
+					15 01 00 00 00 00 02 53 28						// Brightness control block - ON
+					15 01 00 00 00 00 02 55 04						// Enable PLC with rate1
+					39 01 00 00 00 00 08 57 20 01 00 F8 FF F0 00	// mLPIS
+					39 01 00 00 00 00 07 58 00 00 00 F8 FF FC		// mLPIS for AoD - all OFF
+					15 01 00 00 00 00 02 76 00						// DHFR mode 0 (ST PMIC) - 60Hz
+
+					// PPS
+					0A 01 00 00 00 00 80
+						11 00 00 89 30 80 07 64 05 40 03 B2 02 A0 02 A0
+						02 00 02 50 00 20 65 21 00 09 00 0C 00 1A 00 17
+						18 00 10 F0 03 0C 20 00 06 0B 0B 33 0E 1C 2A 38
+						46 54 62 69 70 77 79 7B 7D 7E 01 02 01 00 09 40
+						09 BE 19 FC 19 FA 19 F8 1A 38 1A 78 1A B6 2A F6
+						2B 34 2B 74 3B 74 6B F4 00 00 00 00 00 00 00 00
+						00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+						00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+					39 01 00 00 00 00 04 74 05 00 34				// QSYNC_EN=1, EXT_TRIG=1, QSYNC_TO=208(52x4)
+					15 01 00 00 00 00 02 35 00						// TE On
+					39 01 00 00 00 00 03 44 00 00					// TE_LINE=0
+					05 01 00 00 82 00 01 11							// Sleep Out command AND wait 130 ms
+
+					39 01 00 00 00 00 03 E5 00 20					// Force DCS TE
+					15 01 00 00 00 00 02 B0 08						// Offset P09-11: 60Hz VFP trimming EV2,3
+					39 01 00 00 00 00 04 E1 00 04 50                //  1212(0x4BC) -> 1104(0x450)
+					15 01 00 00 00 00 02 B0 10						// Offset P17-19: 90Hz VFP trimming EV2,3
+					39 01 00 00 00 00 04 E1 00 00 60                //  168(0xA8) -> 96(0x60)
+					39 01 00 00 00 00 02 B0 09						// Re-program some PLC values
+					39 01 00 00 00 00 08 E6 F0 01 59 92 76 01 68					
+					39 01 00 00 00 00 02 B0 70						// Parameter Offset
+					39 01 00 00 00 00 02 EC 01						// Flash Control - unknown
+				];
+				qcom,mdss-dsi-off-command = [
+					05 01 00 00 14 00 01 28							// Display Off command AND wait 20 ms
+					05 01 00 00 6E 00 01 10							// Sleep in command AND wait 110 ms
+					05 01 00 00 0A 00 01 01              			// SW Reset and wait 10 ms
+				];
+				qcom,mdss-dsi-timing-switch-command = [
+					15 01 00 00 00 00 02 76 00						// DHFR mode 0 (ST PMIC) - 60Hz
+				];
+				qcom,mdss-dsi-post-panel-on-command = [
+					05 01 00 00 00 00 01 29							// Display ON
+				];
+				qcom,mdss-dsi-timing-switch-command-state = "dsi_hs_mode";
+				qcom,mdss-dsi-on-command-state = "dsi_lp_mode";
+				qcom,mdss-dsi-off-command-state = "dsi_hs_mode";
+				qcom,mdss-dsi-post-on-command-state = "dsi_hs_mode";
+				qcom,display-topology = <1 1 1>;
+				qcom,default-topology-index = <0>;
+				surface-ext-trig-enable = <1>;
+				surface-dsi-elvss-levels = <10>;
+				surface-dsi-aod-on-commands = [
+					05 01 00 00 14 00 01 28							// display off and wait 20 ms
+					05 01 00 00 50 00 01 39							// aod in and wait 80 ms
+					15 01 00 00 00 00 02 B0 A8						// 8 color on
+					39 01 00 00 00 00 02 E1 DA
+					39 01 00 00 00 00 03 51 07 FF					// aod dbv 7ff, 1ff, 001
+					05 01 00 00 00 00 01 29							// Display ON
+				];
+				surface-dsi-aod-off-commands =[
+					05 01 00 00 00 00 01 28							// Display off
+					05 01 00 00 50 00 01 38							// aod out
+					15 01 00 00 00 00 02 B0 A8						// 8 Color off
+					39 01 00 00 00 00 02 E1 D2
+					39 01 00 00 00 00 03 51 05 87					// Normal 350nit Band DBV 587
+					05 01 00 00 00 00 01 29							// Display on
+				];
+				surface-dsi-switch-rr-60-commands = [
+					15 01 00 00 00 00 02 76 00						// DHFR mode 0 (ST PMIC) - 60Hz
+				];
+				surface-dsi-switch-rr-90-commands = [
+					15 01 00 00 00 00 02 76 01						// DHFR mode 1 (ST PMIC) - 90Hz
+				];
+			};
+			timing@1{
+				qcom,mdss-dsi-panel-framerate = <90>;
+				qcom,mdss-dsi-panel-width = <1344>;
+				qcom,mdss-dsi-panel-height = <1892>;
+				qcom,mdss-dsi-h-front-porch = <32>;
+				qcom,mdss-dsi-h-back-porch = <32>;
+				qcom,mdss-dsi-h-pulse-width = <32>;
+				qcom,mdss-dsi-h-sync-skew = <0>;
+				qcom,mdss-dsi-h-sync-pulse = <0>;
+				qcom,mdss-dsi-v-back-porch = <32>;
+				qcom,mdss-dsi-v-front-porch = <32>;
+				qcom,mdss-dsi-v-pulse-width = <10>;
+				qcom,mdss-dsi-panel-jitter = <0x1 0x1>;
+				qcom,mdss-dsi-cmd-mode;
+				qcom,compression-mode = "dsc";
+				qcom,mdss-dsc-version = <0x11>;
+				qcom,mdss-dsc-scr-version = <0x0>;
+				qcom,mdss-dsc-encoders = <1>;
+				qcom,mdss-dsc-slice-per-pkt = <2>;
+				qcom,mdss-dsc-slice-height = <946>;
+				qcom,mdss-dsc-slice-width = <672>;
+				qcom,mdss-dsc-bit-per-component = <8>;
+				qcom,mdss-dsc-bit-per-pixel = <8>;
+				qcom,mdss-dsc-block-prediction-enable;
+				qcom,mdss-dsi-panel-clockrate = <740000000>;
+				qcom,mdss-dsi-t-clk-post = <0x0B>;
+				qcom,mdss-dsi-t-clk-pre = <0x017>;
+				qcom,mdss-dsi-panel-phy-timings = [00 1A 07 06 16 21 07 07 07 02 04 00 17 0B];
+				qcom,mdss-dsi-on-command = [
+					39 01 00 00 00 00 03 7F 5A 5A					// UCS Access
+					39 01 00 00 00 00 03 F0 5A 5A					// MCS Access LV1
+					39 01 00 00 00 00 03 F1 5A 5A					// MCS Access LV2
+					39 01 00 00 00 00 03 F2 5A 5A					// MCS Access LV3
+					39 01 00 00 00 00 02 E7 00						// Flash Access
+					15 01 00 00 00 00 02 02 01						// Enable DSC
+					15 01 00 00 00 00 02 59 00						// Command DSC mode
+					39 01 00 00 00 00 05 2A 00 00 05 3F				// Column address - 1,343
+					39 01 00 00 00 00 05 2B 00 00 07 63				// Page address - 1,891
+					39 01 00 00 00 00 03 51 02 4D					// Default DBV - 80 nits
+					15 01 00 00 00 00 02 53 28						// Brightness control block - ON
+					15 01 00 00 00 00 02 55 04						// Enable PLC with rate1
+					39 01 00 00 00 00 08 57 20 01 00 F8 FF F0 00	// mLPIS
+					39 01 00 00 00 00 07 58 00 00 00 F8 FF FC		// mLPIS for AoD - all OFF
+					15 01 00 00 00 00 02 76 01						// DHFR mode 1 (ST PMIC) - 90Hz
+
+					// PPS
+					0A 01 00 00 00 00 80
+						11 00 00 89 30 80 07 64 05 40 03 B2 02 A0 02 A0
+						02 00 02 50 00 20 65 21 00 09 00 0C 00 1A 00 17
+						18 00 10 F0 03 0C 20 00 06 0B 0B 33 0E 1C 2A 38
+						46 54 62 69 70 77 79 7B 7D 7E 01 02 01 00 09 40
+						09 BE 19 FC 19 FA 19 F8 1A 38 1A 78 1A B6 2A F6
+						2B 34 2B 74 3B 74 6B F4 00 00 00 00 00 00 00 00
+						00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+						00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+					39 01 00 00 00 00 04 74 05 00 34				// QSYNC_EN=1, EXT_TRIG=1, QSYNC_TO=208(52x4)
+					15 01 00 00 00 00 02 35 00						// TE On
+					39 01 00 00 00 00 03 44 00 00					// TE_LINE=0
+					05 01 00 00 82 00 01 11							// Sleep Out command AND wait 130 ms
+
+					39 01 00 00 00 00 03 E5 00 20					// Force DCS TE
+					15 01 00 00 00 00 02 B0 08						// Offset P09-11: 60Hz VFP trimming EV2,3
+					39 01 00 00 00 00 04 E1 00 04 50                //  1212(0x4BC) -> 1104(0x450)
+					15 01 00 00 00 00 02 B0 10						// Offset P17-19: 90Hz VFP trimming EV2,3
+					39 01 00 00 00 00 04 E1 00 00 60                //  168(0xA8) -> 96(0x60)
+					39 01 00 00 00 00 02 B0 09						// Re-program some PLC values
+					39 01 00 00 00 00 08 E6 F0 01 59 92 76 01 68					
+					39 01 00 00 00 00 02 B0 70						// Parameter Offset
+					39 01 00 00 00 00 02 EC 01						// Flash Control - unknown
+				];
+				qcom,mdss-dsi-off-command = [
+					05 01 00 00 14 00 01 28							// Display Off command AND wait 20 ms
+					05 01 00 00 6E 00 01 10							// Sleep in command AND wait 110 ms
+					05 01 00 00 0A 00 01 01              			// SW Reset and wait 10 ms
+				];
+				qcom,mdss-dsi-timing-switch-command = [
+					15 01 00 00 00 00 02 76 01						// DHFR mode 1 (ST PMIC) - 90Hz
+				];
+				qcom,mdss-dsi-post-panel-on-command = [
+					05 01 00 00 00 00 01 29							// Display ON
+				];
+				qcom,mdss-dsi-timing-switch-command-state = "dsi_hs_mode";
+				qcom,mdss-dsi-on-command-state = "dsi_lp_mode";
+				qcom,mdss-dsi-off-command-state = "dsi_hs_mode";
+				qcom,mdss-dsi-post-on-command-state = "dsi_hs_mode";
+				qcom,display-topology = <1 1 1>;
+				qcom,default-topology-index = <0>;
+				surface-ext-trig-enable = <1>;
+				surface-dsi-elvss-levels = <10>;
+				surface-dsi-aod-on-commands = [
+					05 01 00 00 14 00 01 28							// display off and wait 20 ms
+					05 01 00 00 50 00 01 39							// aod in and wait 80 ms
+					15 01 00 00 00 00 02 B0 A8						// 8 color on
+					39 01 00 00 00 00 02 E1 DA
+					39 01 00 00 00 00 03 51 07 FF					// aod dbv 7ff, 1ff, 001
+					05 01 00 00 00 00 01 29							// Display ON
+				];
+				surface-dsi-aod-off-commands =[
+					05 01 00 00 00 00 01 28							// Display off
+					05 01 00 00 50 00 01 38							// aod out
+					15 01 00 00 00 00 02 B0 A8						// 8 Color off
+					39 01 00 00 00 00 02 E1 D2
+					39 01 00 00 00 00 03 51 05 87					// Normal 350nit Band DBV 587
+					05 01 00 00 00 00 01 29							// Display on
+				];
+				surface-dsi-switch-rr-60-commands = [
+					15 01 00 00 00 00 02 76 00						// DHFR mode 0 (ST PMIC) - 60Hz
+				];
+				surface-dsi-switch-rr-90-commands = [
+					15 01 00 00 00 00 02 76 01						// DHFR mode 1 (ST PMIC) - 90Hz
+				];
+			};
+		};
+	};
+};
